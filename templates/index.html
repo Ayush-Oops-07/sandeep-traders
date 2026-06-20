@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0b0f1a">
+<title>Sandeep Traders — Business Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-bg-grid"></div>
+  <div class="login-orb login-orb1"></div>
+  <div class="login-orb login-orb2"></div>
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-logo-wrap">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="10" fill="url(#lg1)"/><path d="M8 20l5-8 4 6 3-4 4 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs></svg>
+      </div>
+      <div class="login-brand-text">
+        <h1>SANDEEP TRADERS</h1>
+        <p>Pakhopali Road, Thawe · Business Suite</p>
+      </div>
+    </div>
+    <div class="login-divider"></div>
+    <div class="form-group">
+      <label class="form-label">Select User</label>
+      <div class="select-wrap">
+        <select id="login-user" class="form-control">
+          <option value="">— Select User —</option>
+          <option value="admin">Admin</option>
+          <option value="mandeep">Mandeep</option>
+          <option value="sandeep">Sandeep</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="input-wrap">
+        <input type="password" id="login-pass" class="form-control" placeholder="Enter your password"
+          onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="pw-toggle" onclick="togglePw()" tabindex="-1" type="button">
+          <svg id="pw-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="login-error" id="login-err"></div>
+    <button class="btn-login" id="login-btn" onclick="doLogin()">
+      <span id="login-btn-text">Sign In</span>
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <div class="login-footer">Secured · Session expires on browser close</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MAIN APP
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-left">
+      <button class="topbar-menu-btn" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-brand">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="url(#tblg)"/><path d="M8 20l5-8 4 6 3-4 4 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="tblg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs></svg>
+        <div class="topbar-brand-text">
+          <span class="tb-name">SANDEEP TRADERS</span>
+          <span class="tb-sub" id="tb-module-label">Customer Module</span>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-center" id="breadcrumb-wrap">
+      <nav class="breadcrumb" id="breadcrumb"></nav>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-new-entry" id="fab-new-entry" onclick="openNewEntry()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        <span>New Entry</span>
+      </button>
+      <div class="user-pill" onclick="toggleUserMenu()" id="user-pill">
+        <div class="user-avatar" id="user-av">A</div>
+        <span class="user-name" id="user-nm">Admin</span>
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="user-dd-info">
+          <div class="user-dd-name" id="user-dd-name">Admin</div>
+          <div class="user-dd-role" id="user-dd-role">Administrator</div>
+        </div>
+        <div class="user-dd-sep"></div>
+        <button class="user-dd-item" onclick="openChangePassword()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Change Password
+        </button>
+        <button class="user-dd-item danger" onclick="doLogout()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="url(#sblg)"/><path d="M8 20l5-8 4 6 3-4 4 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="sblg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs></svg>
+        <span>SANDEEP TRADERS</span>
+      </div>
+      <button class="sidebar-home-btn" onclick="navigate('home')" title="Switch Module">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Home
+      </button>
+    </div>
+
+    <!-- MODULE SWITCHER -->
+    <div class="module-switcher">
+      <button class="module-btn active" id="mod-customer" onclick="switchModule('customer');navigate('dashboard')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Customer
+      </button>
+      <button class="module-btn" id="mod-shoper" onclick="switchModule('shoper');navigate('dashboard')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Shoper
+      </button>
+    </div>
+
+    <!-- NAV ITEMS -->
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">MAIN</div>
+      <button class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard')">
+        <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" id="nav-customers" onclick="navigate('customers')">
+        <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <span id="nav-customers-label">Customers</span>
+      </button>
+      <button class="nav-item" id="nav-invoices" onclick="navigate('invoices')">
+        <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Invoices
+      </button>
+
+      <div class="nav-section-label" style="margin-top:8px">TOOLS</div>
+      <button class="nav-item" id="nav-products" onclick="navigate('products')">
+        <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        Products
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" onclick="doLogout()">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- PAGE CONTAINER -->
+  <main class="page-container" id="page-container">
+
+    <!-- ─── HOME (module selector) ─── -->
+    <div id="page-home" class="page active">
+      <div class="home-hero">
+        <div class="home-hero-text">
+          <div class="home-brand-badge">SANDEEP TRADERS · Pakhopali Road, Thawe</div>
+          <h1 id="home-greeting">Good Morning 👋</h1>
+          <p>Aap kaun sa module khona chahte hain?</p>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+            <span style="font-size:13px;color:var(--text3);font-family:'JetBrains Mono',monospace" id="home-clock"></span>
+            <span style="font-size:13px;color:var(--text3)" id="home-date"></span>
+          </div>
+        </div>
+      </div>
+      <div class="module-cards">
+        <div class="module-card customer-card" onclick="switchModule('customer');navigate('dashboard')">
+          <div class="module-card-glow customer-glow"></div>
+          <div class="mc-top">
+            <div class="mc-icon mc-icon-customer">
+              <svg width="34" height="34" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="mc-badge mc-badge-blue">Retail</div>
+          </div>
+          <div class="mc-content">
+            <h2>Customer</h2>
+            <p>Retail sales · Individual ledgers · Payment tracking</p>
+          </div>
+          <div class="mc-stats" id="mc-stats-customer">
+            <div class="mc-stats-loading">
+              <span class="spinner-dot"></span> Loading...
+            </div>
+          </div>
+          <div class="mc-enter">
+            Open Dashboard
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+
+        <div class="module-card shoper-card" onclick="switchModule('shoper');navigate('dashboard')">
+          <div class="module-card-glow shoper-glow"></div>
+          <div class="mc-top">
+            <div class="mc-icon mc-icon-shoper">
+              <svg width="34" height="34" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+            </div>
+            <div class="mc-badge mc-badge-purple">Wholesale</div>
+          </div>
+          <div class="mc-content">
+            <h2>Shoper / Wholesale</h2>
+            <p>Bulk orders · B2B accounts · Wholesale ledgers</p>
+          </div>
+          <div class="mc-stats" id="mc-stats-shoper">
+            <div class="mc-stats-loading">
+              <span class="spinner-dot"></span> Loading...
+            </div>
+          </div>
+          <div class="mc-enter mc-enter-purple">
+            Open Dashboard
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── DASHBOARD ─── -->
+    <div id="page-dashboard" class="page">
+      <div class="page-header">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn btn-ghost btn-sm" onclick="navigate('home')" style="padding:4px 10px;font-size:12px">
+              ← Home
+            </button>
+            <span class="module-indicator" id="dash-module-badge">Customer</span>
+          </div>
+          <h2 class="page-title" id="dash-title">👤 Customer Dashboard</h2>
+          <p class="page-sub" id="dash-sub">Retail sales · Pakhopali Road, Thawe</p>
+        </div>
+        <div class="page-header-actions">
+          <div class="live-clock" id="live-clock"></div>
+          <button class="btn btn-success" onclick="openQuickPaymentModal('RECEIVED')">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Payment Receive
+          </button>
+          <button class="btn btn-danger" onclick="openQuickPaymentModal('GIVEN')">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/></svg>
+            Payment Give
+          </button>
+          <button class="btn btn-primary" onclick="openNewEntry()">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            New Entry
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI GRID -->
+      <div class="kpi-grid" id="kpi-grid">
+        <div class="kpi kpi-blue"><div class="kpi-icon">👥</div><div class="kpi-val" id="kpi-total">—</div><div class="kpi-lbl">Total</div></div>
+        <div class="kpi kpi-amber"><div class="kpi-icon">⏳</div><div class="kpi-val" id="kpi-pending">—</div><div class="kpi-lbl">Pending</div></div>
+        <div class="kpi kpi-green"><div class="kpi-icon">✅</div><div class="kpi-val" id="kpi-advance">—</div><div class="kpi-lbl">Advance</div></div>
+        <div class="kpi kpi-red"><div class="kpi-icon">₹</div><div class="kpi-val" id="kpi-outstanding">—</div><div class="kpi-lbl">Net Outstanding</div></div>
+        <div class="kpi kpi-blue"><div class="kpi-icon">📈</div><div class="kpi-val" id="kpi-today-sales">—</div><div class="kpi-lbl">Today Sales</div></div>
+        <div class="kpi kpi-green"><div class="kpi-icon">💰</div><div class="kpi-val" id="kpi-today-coll">—</div><div class="kpi-lbl">Today Collection</div></div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <h3>Monthly Sales</h3>
+              <p>Total sales per month</p>
+            </div>
+            <select class="chart-year-select" id="chart-year" onchange="loadDashboard()"></select>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-sales"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div><h3>Portfolio Status</h3><p>Customer balance distribution</p></div>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-donut"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div><h3>Monthly Collections</h3><p>Payments received per month</p></div>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-coll"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div><h3>Top Pending</h3><p>Highest outstanding amounts</p></div>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-top10"></canvas></div>
+        </div>
+      </div>
+
+      <!-- TOP PENDING TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <h3>⚠️ Top Pending Accounts</h3>
+          <span class="badge badge-amber" id="pending-badge">0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th><th>Name</th><th>Mobile</th>
+              <th class="td-r">Balance (₹)</th><th>Action</th>
+            </tr></thead>
+            <tbody id="top-pending-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RECENT TRANSACTIONS -->
+      <div class="card" style="margin-top:16px">
+        <div class="card-header">
+          <h3>🕐 Recent Transactions</h3>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Date</th><th>Party</th><th>Particulars</th>
+              <th class="td-r">Debit ₹</th><th class="td-r">Credit ₹</th><th class="td-r">Balance ₹</th>
+            </tr></thead>
+            <tbody id="recent-txn-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CUSTOMERS/SHOPERS PAGE ─── -->
+    <div id="page-customers" class="page">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title" id="cust-page-title">Customers</h2>
+          <p class="page-sub">Manage all customer accounts</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-primary" onclick="openAddParty()">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Add New
+          </button>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="cust-search" placeholder="Search by name or mobile..." oninput="loadParties()">
+        </div>
+        <div class="filter-tabs">
+          <button class="ftab active" onclick="setStatusFilter(this,'')">All</button>
+          <button class="ftab" onclick="setStatusFilter(this,'pending')">Pending</button>
+          <button class="ftab" onclick="setStatusFilter(this,'advance')">Advance</button>
+          <button class="ftab" onclick="setStatusFilter(this,'clear')">Clear</button>
+        </div>
+      </div>
+
+      <!-- CARD LIST (mobile) -->
+      <div id="party-card-list" class="party-card-list"></div>
+
+      <!-- TABLE (desktop) -->
+      <div class="card">
+        <div class="table-wrap">
+          <table id="party-table">
+            <thead><tr>
+              <th>#</th><th>Name</th><th>Mobile</th><th>Address</th>
+              <th class="td-r">Balance (₹)</th><th>Status</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="party-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── LEDGER PAGE ─── -->
+    <div id="page-ledger" class="page">
+      <div class="ledger-header">
+        <button class="btn btn-ghost back-btn" onclick="goBack()">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </button>
+        <div class="ledger-party-info">
+          <div class="ledger-party-name" id="ledger-party-name">—</div>
+          <div class="ledger-party-meta" id="ledger-party-meta">—</div>
+        </div>
+        <div class="ledger-balance-chip" id="ledger-balance-chip">
+          <div class="lbc-label">Balance</div>
+          <div class="lbc-val" id="ledger-balance-val">₹0</div>
+        </div>
+      </div>
+      <div class="ledger-actions-bar">
+        <button class="btn btn-success" onclick="openQuickPaymentModal('RECEIVED', S.currentPartyId)">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Payment Receive
+        </button>
+        <button class="btn btn-danger" onclick="openQuickPaymentModal('GIVEN', S.currentPartyId)">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/></svg>
+          Payment Give
+        </button>
+        <button class="btn btn-primary" onclick="openInvoiceModal()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          Sale Invoice
+        </button>
+        <button class="btn btn-ghost" onclick="openDebitModal()">+ Debit</button>
+        <button class="btn btn-ghost" onclick="printLedger()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+      </div>
+
+      <!-- Ledger filters -->
+      <div class="ledger-filters">
+        <div class="search-box" style="max-width:240px">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="ledger-search" placeholder="Search entries..." oninput="filterLedger()">
+        </div>
+        <input type="date" class="form-control" id="ledger-from" style="width:150px" oninput="filterLedger()">
+        <span style="color:var(--text3);font-size:12px">to</span>
+        <input type="date" class="form-control" id="ledger-to" style="width:150px" oninput="filterLedger()">
+        <button class="btn btn-ghost" onclick="clearLedgerFilters()">Clear</button>
+      </div>
+
+      <!-- Ledger summary bar -->
+      <div class="ledger-summary-bar" id="ledger-summary-bar">
+        <div class="lsb-item">
+          <div class="lsb-lbl">Total Sales</div>
+          <div class="lsb-val amber" id="lsb-sales">₹0</div>
+        </div>
+        <div class="lsb-sep"></div>
+        <div class="lsb-item">
+          <div class="lsb-lbl">Total Payments</div>
+          <div class="lsb-val green" id="lsb-payments">₹0</div>
+        </div>
+        <div class="lsb-sep"></div>
+        <div class="lsb-item">
+          <div class="lsb-lbl">Opening</div>
+          <div class="lsb-val" id="lsb-opening">₹0</div>
+        </div>
+        <div class="lsb-sep"></div>
+        <div class="lsb-item">
+          <div class="lsb-lbl">Current Balance</div>
+          <div class="lsb-val" id="lsb-balance">₹0</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th><th>Date</th><th>Particulars</th>
+              <th class="td-r">Debit ₹</th><th class="td-r">Credit ₹</th>
+              <th class="td-r">Balance ₹</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="ledger-body"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="ledger-empty" style="display:none">
+          <div class="es-icon">📋</div>
+          <p>No ledger entries found</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── INVOICES PAGE ─── -->
+    <div id="page-invoices" class="page">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Invoices</h2>
+          <p class="page-sub">All sales invoices</p>
+        </div>
+        <div class="page-header-actions">
+          <div class="search-box">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="inv-search" placeholder="Search invoice or party..." oninput="loadInvoices()">
+          </div>
+          <button class="btn btn-primary" onclick="openInvoiceModal()">+ New Invoice</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Invoice #</th><th class="inv-tbl-hide-mobile">Date</th><th>Party</th>
+              <th class="td-r">Amount ₹</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="inv-table-body"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="inv-empty" style="display:none">
+          <div class="es-icon">🧾</div><p>No invoices yet</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PRODUCTS PAGE ─── -->
+    <div id="page-products" class="page">
+      <div class="page-header">
+        <div><h2 class="page-title">Product List</h2><p class="page-sub">Manage products for invoices</p></div>
+        <button class="btn btn-primary" onclick="openAddProductModal()">+ Add Product</button>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:16px 20px">
+          <div class="search-box" style="max-width:320px;margin-bottom:16px">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="prod-search" placeholder="Search products..." oninput="loadProducts()">
+          </div>
+          <div id="products-grid" class="products-grid"></div>
+        </div>
+      </div>
+    </div>
+
+  </main><!-- end page-container -->
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="bnav-btn active" id="bnav-home" onclick="navigate('home');setBottomNav('home')">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="bnav-btn" id="bnav-dashboard" onclick="navigate('dashboard');setBottomNav('dashboard')">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Dash</span>
+    </button>
+    <button class="bnav-btn bnav-fab" onclick="openNewEntry()">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button class="bnav-btn" id="bnav-customers" onclick="navigate('customers');setBottomNav('customers')">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <span>Parties</span>
+    </button>
+    <button class="bnav-btn" id="bnav-invoices" onclick="navigate('invoices');setBottomNav('invoices')">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      <span>Invoices</span>
+    </button>
+  </nav>
+
+</div><!-- end #app -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════════════════════════════════ -->
+
+<!-- NEW ENTRY CHOOSER -->
+<div class="modal-overlay" id="modal-new-entry">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>New Entry</h3>
+      <button class="modal-close" onclick="closeModal('modal-new-entry')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--text2);font-size:13px;margin-bottom:16px">Choose entry type:</p>
+      <div class="entry-type-grid">
+        <button class="entry-type-btn" onclick="closeModal('modal-new-entry');openQuickPaymentModal('RECEIVED')">
+          <div class="etb-icon green">💰</div>
+          <div class="etb-label">Payment Received</div>
+          <div class="etb-sub">Record incoming payment</div>
+        </button>
+        <button class="entry-type-btn" onclick="closeModal('modal-new-entry');openQuickPaymentModal('GIVEN')">
+          <div class="etb-icon red">📤</div>
+          <div class="etb-label">Payment Given</div>
+          <div class="etb-sub">Record outgoing payment</div>
+        </button>
+        <button class="entry-type-btn" onclick="closeModal('modal-new-entry');openInvoiceModal()">
+          <div class="etb-icon blue">🧾</div>
+          <div class="etb-label">Sell Product</div>
+          <div class="etb-sub">Create sales invoice</div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT PARTY MODAL -->
+<div class="modal-overlay" id="modal-party">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="party-modal-title">Add Customer</h3>
+      <button class="modal-close" onclick="closeModal('modal-party')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="party-edit-id">
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Name <span class="req">*</span></label>
+          <input type="text" id="party-name" class="form-control" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mobile</label>
+          <input type="text" id="party-mobile" class="form-control" placeholder="10-digit number">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mobile 2</label>
+          <input type="text" id="party-mobile2" class="form-control" placeholder="Alternate number">
+        </div>
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input type="text" id="party-city" class="form-control" placeholder="City">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Address</label>
+          <textarea id="party-address" class="form-control" rows="2" placeholder="Full address"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">GSTIN</label>
+          <input type="text" id="party-gstin" class="form-control" placeholder="GST number">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Opening Balance (₹)</label>
+          <input type="number" id="party-opening" class="form-control" value="0" step="0.01">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Notes</label>
+          <textarea id="party-notes" class="form-control" rows="2" placeholder="Any notes..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-party')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveParty()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT RECEIVE / PAYMENT GIVE MODAL (Issue 1) -->
+<div class="modal-overlay" id="modal-quick-payment">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <h3 id="qpmnt-title">💰 Payment Receive</h3>
+      <button class="modal-close" onclick="closeModal('modal-quick-payment')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="qpmnt-payment-type" value="RECEIVED">
+
+      <!-- Customer Search -->
+      <div class="form-group">
+        <label class="form-label">Customer <span class="req">*</span></label>
+        <div class="party-search-wrap" id="qpmnt-party-wrap">
+          <div class="search-box">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="qpmnt-party-search" placeholder="Search by name or mobile..." oninput="searchPartyDropdown('qpmnt')" autocomplete="off">
+          </div>
+          <div class="party-dropdown" id="qpmnt-party-dropdown" style="display:none"></div>
+          <div class="selected-party-chip" id="qpmnt-selected-party" style="display:none">
+            <span id="qpmnt-party-name-chip">—</span>
+            <button onclick="clearPartySelection('qpmnt')" type="button">✕</button>
+          </div>
+        </div>
+        <input type="hidden" id="qpmnt-party-id">
+      </div>
+
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Amount (₹) <span class="req">*</span></label>
+          <input type="number" id="qpmnt-amount" class="form-control" placeholder="0.00" step="0.01" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Transaction Date <span class="req">*</span></label>
+          <input type="date" id="qpmnt-date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payment Mode</label>
+          <select id="qpmnt-mode" class="form-control">
+            <option value="cash">Cash</option>
+            <option value="upi">UPI</option>
+            <option value="bank_transfer">Bank</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reference Number</label>
+          <input type="text" id="qpmnt-reference" class="form-control" placeholder="UPI Ref / Cheque No / Txn ID">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Note</label>
+          <textarea id="qpmnt-note" class="form-control" rows="2" placeholder="Optional note..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-quick-payment')">Cancel</button>
+      <button class="btn btn-success" onclick="saveQuickPayment()" id="qpmnt-save-btn">Save Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADJUST PAYMENT AGAINST INVOICE MODAL (Issue 5) -->
+<div class="modal-overlay" id="modal-adjust">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <h3>🔗 Adjust Against Invoice</h3>
+      <button class="modal-close" onclick="closeModal('modal-adjust')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Payment Entry</label>
+        <div id="adj-payment-summary" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px"></div>
+      </div>
+
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Amount to Adjust (₹) <span class="req">*</span></label>
+          <input type="number" id="adj-amount" class="form-control" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adjustment Date</label>
+          <input type="date" id="adj-date" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Apply Against</label>
+        <div style="display:flex;gap:16px;margin-top:4px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+            <input type="radio" name="adj-mode" id="adj-mode-existing" checked onchange="toggleAdjMode()"> Existing Invoice
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+            <input type="radio" name="adj-mode" id="adj-mode-new" onchange="toggleAdjMode()"> Create New Invoice
+          </label>
+        </div>
+      </div>
+
+      <div id="adj-existing-block" class="form-group">
+        <label class="form-label">Select Invoice</label>
+        <select id="adj-invoice-select" class="form-control">
+          <option value="">— Select invoice —</option>
+        </select>
+      </div>
+
+      <div id="adj-new-block" class="two-col" style="display:none">
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">New Invoice Description</label>
+          <input type="text" id="adj-new-desc" class="form-control" placeholder="e.g. Service Charge / Sale">
+        </div>
+        <div class="form-group">
+          <label class="form-label">New Invoice Amount (₹)</label>
+          <input type="number" id="adj-new-amount" class="form-control" min="0" step="0.01" placeholder="Defaults to adjustment amount">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea id="adj-notes" class="form-control" rows="2" placeholder="Optional note..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-adjust')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAdjustment()" id="adj-save-btn">Adjust Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEBIT MODAL -->
+<div class="modal-overlay" id="modal-debit">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <h3>📤 Add Debit Entry</h3>
+      <button class="modal-close" onclick="closeModal('modal-debit')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Date <span class="req">*</span></label>
+          <input type="date" id="debit-date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount (₹) <span class="req">*</span></label>
+          <input type="number" id="debit-amount" class="form-control" placeholder="0.00" step="0.01" min="0">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Particulars <span class="req">*</span></label>
+          <input type="text" id="debit-particulars" class="form-control" placeholder="Reason for debit...">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Notes</label>
+          <textarea id="debit-notes" class="form-control" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-debit')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDebit()">Save Debit</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT ENTRY MODAL -->
+<div class="modal-overlay" id="modal-edit-entry">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <h3>✏️ Edit Entry</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit-entry')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-entry-id">
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" id="edit-entry-date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount (₹)</label>
+          <input type="number" id="edit-entry-amount" class="form-control" step="0.01" id="edit-entry-amount-field">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Particulars</label>
+          <input type="text" id="edit-entry-particulars" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payment Mode</label>
+          <select id="edit-entry-mode" class="form-control">
+            <option value="">—</option>
+            <option value="cash">Cash</option>
+            <option value="upi">UPI</option>
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="cheque">Cheque</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea id="edit-entry-notes" class="form-control" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="edit-invoice-note" id="edit-invoice-note" style="display:none">
+        ⚠️ This entry is linked to an invoice. Edit the invoice to change the amount.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-entry')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditEntry()">Update Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- INVOICE BUILDER MODAL -->
+<div class="modal-overlay" id="modal-invoice">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <div>
+        <h3 id="inv-modal-title">🧾 New Invoice</h3>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px" id="inv-modal-sub"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-invoice')">✕</button>
+    </div>
+    <div class="modal-body" style="max-height:80vh;overflow-y:auto">
+      <!-- Party -->
+      <div class="form-group">
+        <label class="form-label">Party <span class="req">*</span></label>
+        <div class="party-search-wrap">
+          <div class="search-box">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="inv-party-search" placeholder="Type name or mobile..." oninput="searchPartyDropdown('inv')" autocomplete="off">
+          </div>
+          <div class="party-dropdown" id="inv-party-dropdown" style="display:none"></div>
+          <div class="selected-party-chip" id="inv-selected-party" style="display:none">
+            <span id="inv-party-name-chip">—</span>
+            <button onclick="clearPartySelection('inv')" type="button">✕</button>
+          </div>
+        </div>
+        <input type="hidden" id="inv-party-id">
+      </div>
+
+      <!-- Invoice meta -->
+      <div class="three-col" style="margin-bottom:16px">
+        <div class="form-group">
+          <label class="form-label">Invoice Date <span class="req">*</span></label>
+          <input type="date" id="inv-date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Invoice Number</label>
+          <input type="text" id="inv-number" class="form-control" placeholder="Auto">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Due Date</label>
+          <input type="date" id="inv-due-date" class="form-control">
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="invoice-items-section">
+        <div class="iis-header">
+          <span>Items</span>
+          <button class="btn btn-sm btn-primary" onclick="addInvRow()">+ Add Item</button>
+        </div>
+        <div id="inv-items-body" class="inv-items-cards"></div>
+        <div class="inv-totals">
+          <div class="inv-total-row"><span>Subtotal</span><span id="inv-subtotal">₹0.00</span></div>
+          <div class="inv-total-row"><span>Discount</span><span id="inv-discount">-₹0.00</span></div>
+          <div class="inv-total-row"><span>GST</span><span id="inv-gst">+₹0.00</span></div>
+          <div class="inv-total-row inv-grand"><span>Grand Total</span><span id="inv-grand">₹0.00</span></div>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:12px">
+        <label class="form-label">Notes</label>
+        <textarea id="inv-notes" class="form-control" rows="2" placeholder="Optional notes on invoice..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-invoice')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveInvoice()" id="inv-save-btn">Save &amp; Create Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- INVOICE VIEW MODAL (print/download) -->
+<div class="modal-overlay" id="modal-inv-view">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <h3 id="invv-title">Invoice Preview</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-sm btn-primary" onclick="printInvoice()">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+        <button class="btn btn-sm btn-ghost" onclick="openEditInvoice(S.invViewId)">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit
+        </button>
+        <button class="btn btn-sm btn-ghost" onclick="cancelInvoice()" id="invv-cancel-btn">Cancel Invoice</button>
+        <button class="modal-close" onclick="closeModal('modal-inv-view')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" style="max-height:80vh;overflow-y:auto;padding:20px">
+      <div id="invoice-print-content"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- EDIT INVOICE MODAL -->
+<div class="modal-overlay" id="modal-edit-invoice">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <div>
+        <h3>✏️ Edit Invoice</h3>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">Modify invoice details &amp; items</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-edit-invoice')">✕</button>
+    </div>
+    <div class="modal-body" style="max-height:80vh;overflow-y:auto">
+      <input type="hidden" id="edit-inv-id">
+      <!-- Invoice meta -->
+      <div class="three-col" style="margin-bottom:16px">
+        <div class="form-group">
+          <label class="form-label">Invoice Date <span class="req">*</span></label>
+          <input type="date" id="edit-inv-date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Invoice Number</label>
+          <input type="text" id="edit-inv-number" class="form-control" placeholder="Invoice #">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Due Date</label>
+          <input type="date" id="edit-inv-due" class="form-control">
+        </div>
+      </div>
+      <!-- Items -->
+      <div class="invoice-items-section">
+        <div class="iis-header">
+          <span>Products</span>
+          <button class="btn btn-sm btn-primary" onclick="addEditInvRow()">+ Add Row</button>
+        </div>
+        <div class="inv-items-table-wrap">
+          <table class="inv-items-table">
+            <thead><tr>
+              <th style="width:35%">Product</th>
+              <th style="width:80px">Unit</th>
+              <th style="width:80px;text-align:right">Qty</th>
+              <th style="width:90px;text-align:right">Rate ₹</th>
+              <th style="width:70px;text-align:right">Disc%</th>
+              <th style="width:60px;text-align:right">GST%</th>
+              <th style="width:100px;text-align:right">Total ₹</th>
+              <th style="width:40px"></th>
+            </tr></thead>
+            <tbody id="edit-inv-items-body"></tbody>
+          </table>
+        </div>
+        <div class="inv-totals">
+          <div class="inv-total-row"><span>Subtotal</span><span id="edit-inv-subtotal">₹0.00</span></div>
+          <div class="inv-total-row"><span>Discount</span><span id="edit-inv-discount">-₹0.00</span></div>
+          <div class="inv-total-row"><span>GST</span><span id="edit-inv-gst">+₹0.00</span></div>
+          <div class="inv-total-row inv-grand"><span>Grand Total</span><span id="edit-inv-grand">₹0.00</span></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label class="form-label">Notes</label>
+        <textarea id="edit-inv-notes" class="form-control" rows="2" placeholder="Optional notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-invoice')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditInvoice()" id="edit-inv-save-btn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div class="modal-overlay" id="modal-add-product">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>Add Product</h3>
+      <button class="modal-close" onclick="closeModal('modal-add-product')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Product Name <span class="req">*</span></label>
+        <input type="text" id="new-prod-name" class="form-control" placeholder="e.g. NUVOCO CEMENT">
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">Default Unit</label>
+          <select id="new-prod-unit" class="form-control">
+            <option value="">—</option>
+            <option>KG</option><option>BAG</option><option>BORA</option>
+            <option>TALI</option><option>KATI</option><option>FEET</option>
+            <option>GRAM</option><option>PIC</option><option>CEMENT</option>
+            <option>TMT</option><option>BALU</option><option>GITI</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Default Rate ₹</label>
+          <input type="number" id="new-prod-rate" class="form-control" placeholder="0.00" step="0.01">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-product')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNewProduct()">Add Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal-overlay" id="modal-change-pw">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>Change Password</h3>
+      <button class="modal-close" onclick="closeModal('modal-change-pw')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <input type="password" id="cpw-old" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input type="password" id="cpw-new" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <input type="password" id="cpw-confirm" class="form-control">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-change-pw')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveChangePw()">Update Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3 id="confirm-title">Confirm Delete</h3>
+      <button class="modal-close" onclick="closeModal('modal-confirm')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-msg" style="color:var(--text2);font-size:14px;line-height:1.6"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-confirm')">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

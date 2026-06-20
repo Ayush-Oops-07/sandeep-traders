@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: sandeep-traders
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --bind 0.0.0.0:$PORT --timeout 120 --threads 4
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sandeep-traders-db
+          property: connectionString
+
+databases:
+  - name: sandeep-traders-db
+    databaseName: sandeep_traders
+    user: sandeep_user
+    plan: free
